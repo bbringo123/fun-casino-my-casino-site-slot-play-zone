@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كازينو سلوت تجريبي</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>كازينو سلوت تجريبي</h1>
+    <div id="user-info">
+      <span id="username">اسم اللاعب: Ahmed</span>
+      <span id="balance">رصيد: 1000 €</span>
+    </div>
+  </header>
+
+  <main>
+    <div id="slot-machine">
+      <div class="reel" id="reel1">🍒</div>
+      <div class="reel" id="reel2">🍋</div>
+      <div class="reel" id="reel3">🍉</div>
+    </div>
+    <button id="spinBtn">Spin</button>
+    <div id="message"></div>
+  </main>
+
+  <footer>
+    <button id="add-funds">إضافة رصيد تجريبي</button>
+    <button id="test-pay">دفع تجريبي (Sandbox)</button>
+  </footer>
+
+  <script src="slot.js"></script>
+</body>
+</html>
+let balance = 1000;
+
+const reelSymbols = ["🍒", "🍋", "🍉", "🍇", "🔔"];
+const balanceEl = document.getElementById("balance");
+const messageEl = document.getElementById("message");
+
+document.getElementById("spinBtn").addEventListener("click", () => {
+  if(balance < 10){
+    messageEl.textContent = "رصيدك قليل، أضف رصيد!";
+    return;
+  }
+
+  balance -= 10; // تكلفة الدور
+  const result = [
+    reelSymbols[Math.floor(Math.random() * reelSymbols.length)],
+    reelSymbols[Math.floor(Math.random() * reelSymbols.length)],
+    reelSymbols[Math.floor(Math.random() * reelSymbols.length)]
+  ];
+
+  document.getElementById("reel1").textContent = result[0];
+  document.getElementById("reel2").textContent = result[1];
+  document.getElementById("reel3").textContent = result[2];
+
+  if(result[0] === result[1] && result[1] === result[2]){
+    let win = 100; // جائزة الدور
+    balance += win;
+    messageEl.textContent = `مبروك! ربحت ${win} € 🎉`;
+  } else {
+    messageEl.textContent = "حظ أوفر المرة القادمة!";
+  }
+
+  balanceEl.textContent = `رصيد: ${balance} €`;
+});
+
+// زر إضافة رصيد تجريبي
+document.getElementById("add-funds").addEventListener("click", () => {
+  balance += 500;
+  balanceEl.textContent = `رصيد: ${balance} €`;
+  messageEl.textContent = "تمت إضافة 500 € رصيد تجريبي!";
+});
+
+// زر الدفع التجريبي (PayPal Sandbox / Stripe Test)
+document.getElementById("test-pay").addEventListener("click", () => {
+  messageEl.textContent = "فتح نافذة الدفع التجريبي... (Sandbox)";
+});
+body { font-family: Arial, sans-serif; text-align: center; background: #222; color: #fff; }
+header, footer { padding: 10px; }
+#slot-machine { display: flex; justify-content: center; margin: 20px; font-size: 50px; }
+button { padding: 10px 20px; margin: 5px; font-size: 16px; cursor: pointer; }
+#message { margin-top: 20px; font-size: 18px; color: yellow; }
